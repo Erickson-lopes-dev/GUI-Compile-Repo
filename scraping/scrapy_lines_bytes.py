@@ -5,7 +5,7 @@ def get_lines_bytes(url):
     # converte
     obj_soup = html_convert_python(url)
     # busca o texto
-    infos = obj_soup.find(class_='text-mono f6 flex-auto pr-3 flex-order-2 flex-md-order-1 mt-2 mt-md-0').text
+    infos = obj_soup.find(class_='text-mono f6 flex-auto pr-3 flex-order-2 flex-md-order-1').text
 
     formated = infos.replace('symbolic link', '').replace('executable file', '').split()
 
