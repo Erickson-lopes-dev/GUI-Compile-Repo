@@ -4,7 +4,7 @@ from tqdm import tqdm
 from scraping.scrapy_data_full import get_data_repository_full
 from scraping.scrapy_lines_bytes import get_lines_bytes
 
-data = get_data_repository_full('Erickson-lopes-dev/Universo_Programado_Numeros')
+data = get_data_repository_full('Erickson-lopes-dev/Dicas_Pandas_Linkedin')
 
 
 class Centralizar:
@@ -53,10 +53,8 @@ for num, file in enumerate(tqdm(data, desc='Construindo Tabela')):
         lb = get_lines_bytes('https://github.com' + file['url'])
         # Adiciona uma linha na tabela
         tv.insert(parent='', index=num, iid=num, text='', values=(file['name'],
-                                                                  file['extension'],
-                                                                  lb[0],
+                                                                  file['extension'] if '.' in file['name'] else '',
+                                                                  lb[0] if lb[0] != 0 else '',
                                                                   lb[1]))
 
 tv.pack()
-
-ws.mainloop()
