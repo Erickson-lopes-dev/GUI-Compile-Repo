@@ -3,6 +3,7 @@ from tkinter import ttk
 from tqdm import tqdm
 from scraping.scrapy_data_full import get_data_repository_full
 from scraping.scrapy_lines_bytes import get_lines_bytes
+import webbrowser
 
 repo = 'Erickson-lopes-dev/Compile-Repo'
 
@@ -37,9 +38,8 @@ ws.title(f'Compile Repo GUI ({repo})')
 # impedir redimensionamento
 ws.resizable(False, False)
 
-
 # Centralizando
-janela_centralizada = Centralizar(ws, 600, 600)
+janela_centralizada = Centralizar(ws, 600, 640)
 janela_centralizada.centralizado()
 
 # gerando frame
@@ -55,10 +55,19 @@ tabela.column('Lines', anchor=CENTER, width=80)
 tabela.column('Size', anchor=CENTER, width=80)
 
 tabela.heading('#0', text='', anchor=CENTER)
-tabela.heading('Name File', text='Name File', anchor=CENTER)
-tabela.heading('Extension', text='Extension', anchor=CENTER)
-tabela.heading('Lines', text='Lines', anchor=CENTER)
-tabela.heading('Size', text='Size', anchor=CENTER)
+tabela.heading('Name File', text='Nome do Arquivo', anchor=CENTER)
+tabela.heading('Extension', text='Extensão', anchor=CENTER)
+tabela.heading('Lines', text='Qtd. Linhas', anchor=CENTER)
+tabela.heading('Size', text='Tamanho', anchor=CENTER)
+
+
+def on_double_click(event):
+    item = tabela.selection()
+    for i in item:
+        webbrowser.open('https://github.com' + tabela.item(i, "values")[-1])
+        # Pega todos os valores
+        # print(tabela.item(i, "values"))
+
 
 for num, file in enumerate(tqdm(data, desc='Construindo Tabela')):
     if file['type_file'] == 'File' and file['extension'] != 'Go to parent directory':
@@ -67,14 +76,19 @@ for num, file in enumerate(tqdm(data, desc='Construindo Tabela')):
         tabela.insert(parent='', index=num, iid=num, text='', values=(file['name'],
                                                                       file['extension'] if '.' in file['name'] else '',
                                                                       lb[0] if lb[0] != 0 else '',
-                                                                      lb[1]))
+                                                                      lb[1],
+                                                                      file['url']))
 
+tabela.bind('<Double-1>', on_double_click)
+
+# Criação da label e botao
 label_repo_name = Label(frame, text=repo.split('/')[1], font='Arial 18')
+botao_link = Button(frame, text='Abrir Arquivo ', width=15, height=2)
 
-# tabela.pack(pady=59)
-
+# Exebindo e configurando posição dos itens
 label_repo_name.grid(row=0, column=0)
+# botao_link.grid(row=2, column=0, pady=20)
 tabela.grid(row=1, column=0)
-
 frame.pack()
+
 frame.mainloop()
