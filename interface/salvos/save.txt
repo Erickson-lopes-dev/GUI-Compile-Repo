@@ -1,0 +1,4 @@
+Estudo
+foto, 'C:/Users/erick/Desktop/fotos.png'
+foto, 'C:/Users/erick/Desktop/divisao-celular.jpg'
+
