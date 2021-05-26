@@ -6,5 +6,5 @@ def lines_bytes(item, repo, self):
         pass
     else:
         # converter tudo para Bytes
-        item['lb'] = get_lines_bytes(self.url_git + item['url'])
+        item['lb'] = get_lines_bytes('https://github.com' + item['url'])
         return item

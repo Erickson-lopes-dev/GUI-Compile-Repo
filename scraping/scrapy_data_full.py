@@ -2,7 +2,7 @@ from scraping.scrapy_tree import get_data_page
 from tqdm import tqdm
 
 
-def get_data_repository_full(url, self):
+def get_data_repository_full(url):
     """
         Retorna Todos as informações especificadas
     :param self:
@@ -27,7 +27,7 @@ def get_data_repository_full(url, self):
         for url_directory in urls_directories:
 
             # armazenando os dados coletados do repositório indicado com a função que busca os itens
-            collected_data = get_data_page(self.url_git + '/' + url_directory, page_main)
+            collected_data = get_data_page('https://github.com' + '/' + url_directory, page_main)
 
             # percorre todos os dados coletados
             for data in tqdm(collected_data, desc='Encontrado Arquivos'):

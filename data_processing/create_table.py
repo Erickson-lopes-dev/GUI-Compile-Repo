@@ -3,7 +3,7 @@ from scraping.scrapy_lines_bytes import get_lines_bytes
 from tqdm import tqdm
 
 
-def create_pettyTable(repo, data_full, self):
+def create_pettyTable(repo, data_full):
     """
         Função que constrói e retorna a tabela
     :param repo:
@@ -19,7 +19,7 @@ def create_pettyTable(repo, data_full, self):
         if file['type_file'] == 'File' and file['extension'] != 'Go to parent directory':
             try:
                 # Tenta buscar as informações de linhas e bytes do arquivo pela sua url
-                lb = get_lines_bytes(self.url_git + file['url'])
+                lb = get_lines_bytes('https://github.com' + file['url'])
 
                 # Adiciona uma linha na tabela
                 table.add_row([

@@ -1,5 +1,7 @@
 from tkinter import *
 
+from main import CompileRepo
+
 root = Tk()
 
 lista = Listbox(root)
