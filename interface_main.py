@@ -4,9 +4,13 @@ from tqdm import tqdm
 from scraping.scrapy_data_full import get_data_repository_full
 from scraping.scrapy_lines_bytes import get_lines_bytes
 
-data = get_data_repository_full('Erickson-lopes-dev/Dicas_Pandas_Linkedin')
+repo = 'Erickson-lopes-dev/Compile-Repo'
+
+# Carrega os dados
+data = get_data_repository_full(repo)
 
 
+# Centraliza a GUI
 class Centralizar:
     def __init__(self, janela, largura, altura):
         self.janela = janela
@@ -27,34 +31,50 @@ class Centralizar:
 
 
 ws = Tk()
-ws.title('PythonGuides')
-# ws.geometry('600x600')
-# ws['bg'] = '#fb0'
+# Titulo da GUI
+ws.title(f'Compile Repo GUI ({repo})')
 
+# impedir redimensionamento
+ws.resizable(False, False)
+
+
+# Centralizando
 janela_centralizada = Centralizar(ws, 600, 600)
 janela_centralizada.centralizado()
 
-tv = ttk.Treeview(ws, height=25)
-tv['columns'] = ('Name File', 'Extension', 'Lines', 'Size')
-tv.column('#0', width=0, stretch=NO)
-tv.column('Name File', anchor=CENTER, width=200)
-tv.column('Extension', anchor=CENTER, width=80)
-tv.column('Lines', anchor=CENTER, width=80)
-tv.column('Size', anchor=CENTER, width=80)
+# gerando frame
+frame = Frame(ws)
 
-tv.heading('#0', text='', anchor=CENTER)
-tv.heading('Name File', text='Name File', anchor=CENTER)
-tv.heading('Extension', text='Extension', anchor=CENTER)
-tv.heading('Lines', text='Lines', anchor=CENTER)
-tv.heading('Size', text='Size', anchor=CENTER)
+# Gerando tabela
+tabela = ttk.Treeview(frame, height=25)
+tabela['columns'] = ('Name File', 'Extension', 'Lines', 'Size')
+tabela.column('#0', width=0, stretch=NO)
+tabela.column('Name File', anchor=CENTER, width=200)
+tabela.column('Extension', anchor=CENTER, width=80)
+tabela.column('Lines', anchor=CENTER, width=80)
+tabela.column('Size', anchor=CENTER, width=80)
+
+tabela.heading('#0', text='', anchor=CENTER)
+tabela.heading('Name File', text='Name File', anchor=CENTER)
+tabela.heading('Extension', text='Extension', anchor=CENTER)
+tabela.heading('Lines', text='Lines', anchor=CENTER)
+tabela.heading('Size', text='Size', anchor=CENTER)
 
 for num, file in enumerate(tqdm(data, desc='Construindo Tabela')):
     if file['type_file'] == 'File' and file['extension'] != 'Go to parent directory':
         lb = get_lines_bytes('https://github.com' + file['url'])
         # Adiciona uma linha na tabela
-        tv.insert(parent='', index=num, iid=num, text='', values=(file['name'],
-                                                                  file['extension'] if '.' in file['name'] else '',
-                                                                  lb[0] if lb[0] != 0 else '',
-                                                                  lb[1]))
+        tabela.insert(parent='', index=num, iid=num, text='', values=(file['name'],
+                                                                      file['extension'] if '.' in file['name'] else '',
+                                                                      lb[0] if lb[0] != 0 else '',
+                                                                      lb[1]))
 
-tv.pack()
+label_repo_name = Label(frame, text=repo.split('/')[1], font='Arial 18')
+
+# tabela.pack(pady=59)
+
+label_repo_name.grid(row=0, column=0)
+tabela.grid(row=1, column=0)
+
+frame.pack()
+frame.mainloop()
